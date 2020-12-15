@@ -188,6 +188,15 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
       Index ls_count = IpData().info_ls_count();
       bool request_stop = !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du, mu, dnrm, regu_x,
                           alpha_dual, alpha_primal, ls_count, &IpData(), &IpCq());
+      
+      /* -------------------------- Added on Dec 15 2020 -------------------------- */
+   
+      /** Clears all caches of the OrigIpoptNLP class object*/
+      bool all_nlp_cache_cleared = IpNLP().clearAllCache();
+      /** Clears all caches of the IpCq class object*/
+      bool all_cq_cache_cleared = IpCq().clearAllCache();
+
+      /* -------------------------- Added on Dec 15 2020 -------------------------- */
 
       if( request_stop )
       {
@@ -211,7 +220,7 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
    if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
    {
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,
-                     "Convergence Check:\n");
+                     "Convergence Check: ip_nlp and ip_cq clearAllCache implemented dec 15 2020:\n");
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,
                      "  overall_error = %23.16e   IpData().tol()   = %23.16e\n", overall_error, IpData().tol());
       Jnlst().Printf(J_MOREDETAILED, J_MAIN,

@@ -40,6 +40,14 @@ public:
    { }
    ///@}
 
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+   
+   /** Clears all caches of the class object */
+   virtual bool clearAllCache() = 0;
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
    /** Initialization method.
     *
     * Set the internal options and initialize internal data structures.

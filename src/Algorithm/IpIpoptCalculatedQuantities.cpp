@@ -131,6 +131,94 @@ IpoptCalculatedQuantities::IpoptCalculatedQuantities(
 IpoptCalculatedQuantities::~IpoptCalculatedQuantities()
 { }
 
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
+/** Clears all caches of the class object */
+bool IpoptCalculatedQuantities::clearAllCache()
+{
+   curr_f_cache_.Clear();
+   trial_f_cache_.Clear();
+   curr_grad_f_cache_.Clear();
+   trial_grad_f_cache_.Clear();
+
+   curr_barrier_obj_cache_.Clear();
+   trial_barrier_obj_cache_.Clear();
+   curr_grad_barrier_obj_x_cache_.Clear();
+   curr_grad_barrier_obj_s_cache_.Clear();
+   grad_kappa_times_damping_x_cache_.Clear();
+   grad_kappa_times_damping_s_cache_.Clear();
+
+   curr_c_cache_.Clear();
+   trial_c_cache_.Clear();
+   curr_d_cache_.Clear();
+   trial_d_cache_.Clear();
+   curr_d_minus_s_cache_.Clear();
+   trial_d_minus_s_cache_.Clear();
+   curr_jac_c_cache_.Clear();
+   trial_jac_c_cache_.Clear();
+   curr_jac_d_cache_.Clear();
+   trial_jac_d_cache_.Clear();
+   curr_jac_cT_times_vec_cache_.Clear();
+   trial_jac_cT_times_vec_cache_.Clear();
+   curr_jac_dT_times_vec_cache_.Clear();
+   trial_jac_dT_times_vec_cache_.Clear();
+   curr_jac_c_times_vec_cache_.Clear();
+   curr_jac_d_times_vec_cache_.Clear();
+   curr_constraint_violation_cache_.Clear();
+   trial_constraint_violation_cache_.Clear();
+   curr_nlp_constraint_violation_cache_.Clear();
+   unscaled_curr_nlp_constraint_violation_cache_.Clear();
+   unscaled_trial_nlp_constraint_violation_cache_.Clear();
+
+   curr_exact_hessian_cache_.Clear();
+
+   curr_grad_lag_x_cache_.Clear();
+   trial_grad_lag_x_cache_.Clear();
+   curr_grad_lag_s_cache_.Clear();
+   trial_grad_lag_s_cache_.Clear();
+   curr_grad_lag_with_damping_x_cache_.Clear();
+   curr_grad_lag_with_damping_s_cache_.Clear();
+   curr_compl_x_L_cache_.Clear();
+   curr_compl_x_U_cache_.Clear();
+   curr_compl_s_L_cache_.Clear();
+   curr_compl_s_U_cache_.Clear();
+   trial_compl_x_L_cache_.Clear();
+   trial_compl_x_U_cache_.Clear();
+   trial_compl_s_L_cache_.Clear();
+   trial_compl_s_U_cache_.Clear();
+   curr_relaxed_compl_x_L_cache_.Clear();
+   curr_relaxed_compl_x_U_cache_.Clear();
+   curr_relaxed_compl_s_L_cache_.Clear();
+   curr_relaxed_compl_s_U_cache_.Clear();
+   curr_primal_infeasibility_cache_.Clear();
+   trial_primal_infeasibility_cache_.Clear();
+   curr_dual_infeasibility_cache_.Clear();
+   trial_dual_infeasibility_cache_.Clear();
+   unscaled_curr_dual_infeasibility_cache_.Clear();
+   curr_complementarity_cache_.Clear();
+   trial_complementarity_cache_.Clear();
+   curr_centrality_measure_cache_.Clear();
+   curr_nlp_error_cache_.Clear();
+   unscaled_curr_nlp_error_cache_.Clear();
+   curr_barrier_error_cache_.Clear();
+   curr_primal_dual_system_error_cache_.Clear();
+   trial_primal_dual_system_error_cache_.Clear();
+
+   primal_frac_to_the_bound_cache_.Clear();
+   dual_frac_to_the_bound_cache_.Clear();
+
+   curr_sigma_x_cache_.Clear();
+   curr_sigma_s_cache_.Clear();
+
+   curr_avrg_compl_cache_.Clear();
+   trial_avrg_compl_cache_.Clear();
+   curr_gradBarrTDelta_cache_.Clear();
+
+   return true;
+}
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
 void IpoptCalculatedQuantities::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )

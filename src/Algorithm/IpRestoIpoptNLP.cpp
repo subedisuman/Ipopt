@@ -37,6 +37,17 @@ RestoIpoptNLP::RestoIpoptNLP(
 RestoIpoptNLP::~RestoIpoptNLP()
 { }
 
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+   
+/** Clears all caches of the class object */
+bool RestoIpoptNLP::clearAllCache()
+{
+   // no caches to clear in this class
+   return true;
+}
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
 void RestoIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )

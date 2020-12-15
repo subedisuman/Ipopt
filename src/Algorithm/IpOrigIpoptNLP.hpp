@@ -51,6 +51,13 @@ public:
    virtual ~OrigIpoptNLP();
    ///@}
 
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+   
+   /** Clears all caches of the class object */
+   virtual bool clearAllCache();
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
    virtual bool Initialize(
       const Journalist&  jnlst,
       const OptionsList& options,

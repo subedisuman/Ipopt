@@ -43,6 +43,25 @@ OrigIpoptNLP::~OrigIpoptNLP()
 {
 }
 
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+   
+/** Clears all caches of the class object */
+bool OrigIpoptNLP::clearAllCache()
+{
+   f_cache_.Clear();
+   grad_f_cache_.Clear();
+   c_cache_.Clear();
+   jac_c_cache_.Clear();
+   d_cache_.Clear();
+   jac_d_cache_.Clear();
+   h_cache_.Clear();
+   unscaled_x_cache_.Clear();
+
+   return true;
+}
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
 void OrigIpoptNLP::RegisterOptions(
    SmartPtr<RegisteredOptions> roptions
 )

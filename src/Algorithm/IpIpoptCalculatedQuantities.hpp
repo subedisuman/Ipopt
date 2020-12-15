@@ -100,6 +100,13 @@ public:
    virtual ~IpoptCalculatedQuantities();
    ///@}
 
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+   
+   /** Clears all caches of the class object */
+   virtual bool clearAllCache();
+
+/* -------------------------- Added on Dec 15 2020 -------------------------- */
+
    /** Method for setting pointer for additional calculated
     *  quantities.
     *
