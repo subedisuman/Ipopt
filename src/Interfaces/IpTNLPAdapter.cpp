@@ -2632,7 +2632,7 @@ bool TNLPAdapter::internal_eval_g(
    if( x_tag_for_g_ == x_tag_for_iterates_ )
    {
       // already calculated!
-      return true;
+   //   return true;
    }
 
    x_tag_for_g_ = x_tag_for_iterates_;
@@ -2654,7 +2654,7 @@ bool TNLPAdapter::internal_eval_jac_g(
    if( x_tag_for_jac_g_ == x_tag_for_iterates_ )
    {
       // already calculated!
-      return true;
+   //   return true;
    }
 
    x_tag_for_jac_g_ = x_tag_for_iterates_;

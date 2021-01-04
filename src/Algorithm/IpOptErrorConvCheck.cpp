@@ -189,14 +189,24 @@ ConvergenceCheck::ConvergenceStatus OptimalityErrorConvergenceCheck::CheckConver
       bool request_stop = !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du, mu, dnrm, regu_x,
                           alpha_dual, alpha_primal, ls_count, &IpData(), &IpCq());
       
-      /* -------------------------- Added on Dec 15 2020 -------------------------- */
+      /* -------------------------- Added on Dec 15/Jan 3 2020/21 -------------------------- */
    
       /** Clears all caches of the OrigIpoptNLP class object*/
+      // this should be redundant as ip_nlp cache is cleared inside ip_cq if ip_nlp inside ip_cq points to the same object it was initialized with in the constructor of ip_cq. Only 90 percent sure about this. Look how smartpointer here works, does it allow sharing the ownership or not
       bool all_nlp_cache_cleared = IpNLP().clearAllCache();
+
       /** Clears all caches of the IpCq class object*/
       bool all_cq_cache_cleared = IpCq().clearAllCache();
 
-      /* -------------------------- Added on Dec 15 2020 -------------------------- */
+      if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
+      {
+         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                        "INTERMEDIATE CALLBACK CALLED AND RESULT CACHE CLEARED IN ORIGINAL PROBLEM\n");
+         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                        "  all_nlp_cache_cleared = %d   all_cq_cache_cleared   = %d\n", all_nlp_cache_cleared, all_cq_cache_cleared);
+      }
+
+      /* -------------------------- Added on Dec 15/Jan 3 2020/21 -------------------------- */
 
       if( request_stop )
       {

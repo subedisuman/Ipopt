@@ -214,6 +214,9 @@ bool IpoptCalculatedQuantities::clearAllCache()
    trial_avrg_compl_cache_.Clear();
    curr_gradBarrTDelta_cache_.Clear();
 
+   /** Clears all caches of the IpoptNLP member object for both original and resto problem*/
+   bool all_nlp_cache_cleared = ip_nlp_->clearAllCache();
+
    return true;
 }
 

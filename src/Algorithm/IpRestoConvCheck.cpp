@@ -121,6 +121,26 @@ ConvergenceCheck::ConvergenceStatus RestoConvergenceCheck::CheckConvergence(
       bool request_stop = !IpNLP().IntermediateCallBack(mode, iter, unscaled_f, inf_pr, inf_du, mu, dnrm, regu_x,
                           alpha_dual, alpha_primal, ls_count, &IpData(), &IpCq());
 
+      /* -------------------------- Added on Jan 3 2021 -------------------------- */
+   
+      /** Clears all caches of the RestoIpoptNLP class object*/
+      // this is not needed as resto_ip_nlp doesnot have caches.
+      bool all_resto_nlp_cache_cleared = IpNLP().clearAllCache();
+
+      /** Clears all caches of the IpCq class object for restoration phase*/
+      bool all_resto_cq_cache_cleared = IpCq().clearAllCache();
+
+      /** Clears all caches of the IpCq class object for original problem*/
+      bool all_orig_cq_cache_cleared = orig_ip_cq->clearAllCache();
+
+      if( Jnlst().ProduceOutput(J_MOREDETAILED, J_MAIN) )
+      {
+         Jnlst().Printf(J_MOREDETAILED, J_MAIN,
+                        "INTERMEDIATE CALLBACK CALLED AND RESULT CACHE CLEARED OF RESTO AND ORIGINAL PROBLEM IN RESTORATION PHASE\n");
+      }
+
+      /* -------------------------- Added on Jan 3 2021 -------------------------- */
+
       if( request_stop )
       {
          return ConvergenceCheck::USER_STOP;
