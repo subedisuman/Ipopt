@@ -294,7 +294,12 @@ SolverReturn IpoptAlgorithm::Optimize(
       IpData().TimingStats().CheckConvergence().End();
 
       // main loop
-      while( conv_status == ConvergenceCheck::CONTINUE )
+      // added other valid stop as continue Feb 23, 2021
+      while(   conv_status == ConvergenceCheck::CONTINUE ||
+               conv_status == ConvergenceCheck::CONVERGED ||
+               conv_status == ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT ||
+               conv_status == ConvergenceCheck::MAXITER_EXCEEDED ||
+               conv_status == ConvergenceCheck::CPUTIME_EXCEEDED)
       {
          // Set the Hessian Matrix
          IpData().TimingStats().UpdateHessian().Start();
@@ -331,16 +336,18 @@ SolverReturn IpoptAlgorithm::Optimize(
          // issue error message
          if( emergency_mode )
          {
-            bool retval = line_search_->ActivateFallbackMechanism();
-            if( retval )
-            {
-               Jnlst().Printf(J_WARNING, J_MAIN,
-                              "WARNING: Problem in step computation; switching to emergency mode.\n");
-            }
-            else
+            // No fallback mechanism will be activated because it can go to resto phase in line search
+            // Feb 23, 2021
+            // retval = line_search_->ActivateFallbackMechanism();
+            //retval )
+            //
+            //nlst().Printf(J_WARNING, J_MAIN,
+            //              "WARNING: Problem in step computation; switching to emergency mode.\n");
+            //
+            //
             {
                Jnlst().Printf(J_ERROR, J_MAIN,
-                              "ERROR: Problem in step computation, but emergency mode cannot be activated.\n");
+                              "ERROR: Problem in step computation, emergency mode reached.\n");
                THROW_EXCEPTION(STEP_COMPUTATION_FAILED, "Step computation failed.");
             }
          }
@@ -377,18 +384,20 @@ SolverReturn IpoptAlgorithm::Optimize(
 
       switch( conv_status )
       {
-         case ConvergenceCheck::CONVERGED:
-            retval = SUCCESS;
-            break;
-         case ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT:
-            retval = STOP_AT_ACCEPTABLE_POINT;
-            break;
-         case ConvergenceCheck::MAXITER_EXCEEDED:
-            retval = MAXITER_EXCEEDED;
-            break;
-         case ConvergenceCheck::CPUTIME_EXCEEDED:
-            retval = CPUTIME_EXCEEDED;
-            break;
+         // they are covered in while loop continuation not needed here
+         // Fev 23, 2021
+         //case ConvergenceCheck::CONVERGED:
+         //   retval = SUCCESS;
+         //   break;
+         //case ConvergenceCheck::CONVERGED_TO_ACCEPTABLE_POINT:
+         //   retval = STOP_AT_ACCEPTABLE_POINT;
+         //   break;
+         //case ConvergenceCheck::MAXITER_EXCEEDED:
+         //   retval = MAXITER_EXCEEDED;
+         //   break;
+         //case ConvergenceCheck::CPUTIME_EXCEEDED:
+         //   retval = CPUTIME_EXCEEDED;
+         //   break;
          case ConvergenceCheck::DIVERGING:
             retval = DIVERGING_ITERATES;
             break;
@@ -588,8 +597,8 @@ void IpoptAlgorithm::AcceptTrialPoint()
    // point, do not accept a new iterate
    if( line_search_->CheckSkippedLineSearch() )
    {
-      Jnlst().Printf(J_SUMMARY, J_MAIN,
-                     "Line search didn't find acceptable trial point.\n");
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                     "Line search skipped due to tiny step or reached !accept -> rigorous (Modified Feb 23, 2021).\n");
       return;
    }
 

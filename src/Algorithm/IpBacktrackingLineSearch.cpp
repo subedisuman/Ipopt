@@ -232,7 +232,9 @@ bool BacktrackingLineSearch::InitializeImpl(
       return false;
    }
 
-   rigorous_ = true;
+   // rigorous_ = false set on Feb 23, 2021. Makes iterate do not enter resto phase and instead
+   // skip the line search and do not accept the trial point
+   rigorous_ = false;
    skipped_line_search_ = false;
    tiny_step_last_iteration_ = false;
    fallback_activated_ = false;
@@ -367,7 +369,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    }
 
    // Check if we want to wake up the watchdog
-   if( watchdog_shortened_iter_trigger_ > 0 && !in_watchdog_ && !goto_resto && !tiny_step && !in_soft_resto_phase_
+   // hard coded do not start watchdog. Feb 23, 2021
+   if( false && watchdog_shortened_iter_trigger_ > 0 && !in_watchdog_ && !goto_resto && !tiny_step && !in_soft_resto_phase_
        && !expect_infeasible_problem_ && watchdog_shortened_iter_ >= watchdog_shortened_iter_trigger_ )
    {
       StartWatchDog();
@@ -401,7 +404,12 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
          if( tiny_step_last_iteration_ )
          {
             IpData().Set_info_alpha_primal_char('T');
-            IpData().Set_tiny_step_flag(true);
+            // Feb 23, 2021 Disabling this does not throw tiny step exception will continue iteration
+            // IpData().Set_tiny_step_flag(true);
+            // instead we skip the line search and do not accept the trial
+            Jnlst().Printf(J_SUMMARY, J_MAIN,
+                        "Skipping call line search due to tiny step (Added Feb 23, 2021).\n");
+            skipped_line_search_ = true;
          }
       }
       else
@@ -511,8 +519,8 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
       // the restoration phase.
       if( !rigorous_ )
       {
-         Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
-                        "Skipping call of restoration phase...\n");
+         Jnlst().Printf(J_SUMMARY, J_MAIN,
+                        "Skipping call of restoration phase and skipped line search, do not accept trial point\n");
          skipped_line_search_ = true;
       }
       else
@@ -625,6 +633,9 @@ void BacktrackingLineSearch::FindAcceptableTrialPoint()
    {
       // we didn't do the restoration phase and are now updating the
       // dual variables of the trial point
+      Jnlst().Printf(J_DETAILED, J_LINE_SEARCH,
+                        "Performing dual step (Added Feb 23, 2021).\n");
+
       Number alpha_dual_max = IpCq().dual_frac_to_the_bound(IpData().curr_tau(), *actual_delta->z_L(),
                               *actual_delta->z_U(), *actual_delta->v_L(), *actual_delta->v_U());
 
